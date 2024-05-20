@@ -14,8 +14,19 @@ def index_range(page: int, page_size: int) -> Tuple[int, int]:
     return ((page - 1) * page_size, ((page - 1) * page_size) + page_size)
 
 
+def indexed_dataset(self) -> Dict[int, List]:
+    """
+    Dataset indexed by sorting position starting at 0
+    """
+    if self.__indexed_dataset is None:
+        dataset = self.dataset()
+        self.__indexed_dataset = {i: dataset[i] for i in range(len(dataset))}
+        return self.__indexed_dataset
+
+
 class Server:
-    """Server class to paginate a database of popular baby names.
+    """
+    Server class to paginate a database of popular baby names.
     """
     DATA_FILE = "Popular_Baby_Names.csv"
 
@@ -23,7 +34,8 @@ class Server:
         self.__dataset = None
 
     def dataset(self) -> List[List]:
-        """Cached dataset
+        """
+        Cached dataset
         """
         if self.__dataset is None:
             with open(self.DATA_FILE) as f:
@@ -34,7 +46,8 @@ class Server:
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """Retrieves a page of data.
+        """
+        Retrieves a page of data.
         """
         assert type(page) == int and type(page_size) == int
         assert page > 0 and page_size > 0
@@ -45,7 +58,8 @@ class Server:
         return data[start:end]
 
     def get_hyper_index(self, index: int = None, page_size: int = 10) -> Dict:
-        """Retrieves info about a page from a given index and with a
+        """
+        Retrieves info about a page from a given index and with a
         specified size.
         """
         data = self.indexed_dataset()
